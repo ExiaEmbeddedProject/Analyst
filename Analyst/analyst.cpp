@@ -1,14 +1,12 @@
 #include "analyst.h"
 #include "ui_analyst.h"
 
-Analyst::Analyst(QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::Analyst)
-{
-    ui->setupUi(this);
-}
+class Analyst{
+    Analyst(QWidget *parent) : QMainWindow(parent){
+        ui->setupUi(this);
+    }
+    ~Analyst(){
+        delete ui;
+    }
 
-Analyst::~Analyst()
-{
-    delete ui;
-}
+};
