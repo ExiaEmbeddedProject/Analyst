@@ -19,6 +19,8 @@ Analyst::Analyst(QWidget *parent) :
                     callTracker()
                 )
     );
+
+    this->test();
 }
 
 Analyst::~Analyst()
@@ -29,4 +31,16 @@ Analyst::~Analyst()
 void Analyst::callTracker()
 {
     tools::execCommandLineDetached("D:/Work/pri/Js/Tracker/dist/win-unpacked/tracker.exe", "D:/Work/pri/Js/Tracker/samples/dataSet.Json");
+}
+
+void Analyst::test()
+{
+    QList<point> points = QList<point>();
+    points.append(point(10,20));
+    points.append(point(15,25));
+
+    QList<markedPoint> markedPoints = QList<markedPoint>();
+    markedPoints.append(markedPoint(10,20,"test"));
+
+    tools::writeJsonFile("D:/test.json", tools::createJsonObject(points, markedPoints));
 }

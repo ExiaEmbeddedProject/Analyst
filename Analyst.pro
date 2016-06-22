@@ -14,9 +14,13 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         analyst.cpp \
-    tools.cpp
+    tools.cpp \
+    point.cpp \
+    markedpoint.cpp
 
 HEADERS  += analyst.h \
-    tools.h
+    tools.h \
+    point.h \
+    markedpoint.h
 
 FORMS    += analyst.ui
