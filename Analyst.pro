@@ -5,6 +5,7 @@
 #-------------------------------------------------
 
 QT       += core gui
+QT       += network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -16,11 +17,13 @@ SOURCES += main.cpp\
         analyst.cpp \
     tools.cpp \
     point.cpp \
-    markedpoint.cpp
+    markedpoint.cpp \
+    couchdb.cpp
 
 HEADERS  += analyst.h \
     tools.h \
     point.h \
-    markedpoint.h
+    markedpoint.h \
+    couchdb.h
 
 FORMS    += analyst.ui

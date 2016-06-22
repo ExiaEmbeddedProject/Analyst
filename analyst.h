@@ -12,7 +12,7 @@ class Analyst : public QMainWindow
     Q_OBJECT
 
     public:
-        explicit Analyst(QWidget *parent = 0);
+        Analyst(QWidget *parent = 0);
         ~Analyst();
 
     public slots:
@@ -21,7 +21,6 @@ class Analyst : public QMainWindow
     private:
         Ui::Analyst *ui;
         void test();
-
 };
 
 #endif // ANALYST_H

@@ -1,4 +1,8 @@
 #include "tools.h"
+#include "couchdb.h"
+
+tools::tools(QObject* parent) : QObject(parent)
+{}
 
 void tools::execCommandLine(QString path, QString parameters)
 {
@@ -52,4 +56,33 @@ QJsonObject tools::createJsonObject(QList<point> path, QList<markedPoint> marked
     object["markedPoints"] = array;
 
     return object;
+}
+
+void tools::testdb()
+{
+    Couchdb db;
+
+    db.listDatabases();
+    connect(&db, SIGNAL(databasesListed(QStringList)), this, SLOT(onDatabasesListed(QStringList)));
+
+    db.getAllDocuments("my-database");
+    connect(&db, SIGNAL(databasesListed(QVariantList)), this, SLOT(onAllDocumentsRetreived(QVariantList)));
+
+    db.getDocument("my-database", "my-random-id");
+    connect(&db, SIGNAL(databasesListed(QVariant)), this, SLOT(onDocumentsRetreived(QVariant)));
+}
+
+void tools::onDatabasesListed(QStringList databases)
+{
+
+}
+
+void tools::onAllDocumentsRetreived(QVariantList documents)
+{
+
+}
+
+void tools::onDocumentsRetreived(QVariant document)
+{
+
 }
