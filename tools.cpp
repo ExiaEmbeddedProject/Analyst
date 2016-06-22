@@ -1,4 +1,5 @@
 #include "tools.h"
+#include <QApplication>
 #include "couchdb.h"
 
 tools::tools(QObject* parent) : QObject(parent)
@@ -85,4 +86,19 @@ void tools::onAllDocumentsRetreived(QVariantList documents)
 void tools::onDocumentsRetreived(QVariant document)
 {
 
+}
+
+QJsonObject getSettings()
+{
+    QString val;
+    QFile file;
+    file.setFileName(QApplication::applicationDirPath() + "conf.ini");
+    file.open(QIODevice::ReadOnly | QIODevice::Text);
+    val = file.readAll();
+    file.close();
+
+    QJsonDocument d = QJsonDocument::fromJson(val.toUtf8());
+    QJsonObject object = d.object();
+
+    return object;
 }

@@ -21,6 +21,7 @@ public:
     static void execCommandLineDetached(QString path, QString parameter);
     static bool writeJsonFile(QString name, QJsonObject object);
     static QJsonObject createJsonObject(QList<point> path, QList<markedPoint> markedPoints);
+    static QJsonObject getSettings();
     void testdb();
 private slots:
     void onDatabasesListed(QStringList);

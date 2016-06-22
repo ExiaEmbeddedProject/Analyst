@@ -19,11 +19,18 @@ SOURCES += main.cpp\
     point.cpp \
     markedpoint.cpp \
     couchdb.cpp
+    datarow.cpp \
+    minor.cpp
 
 HEADERS  += analyst.h \
     tools.h \
     point.h \
     markedpoint.h \
     couchdb.h
+    datarow.h \
+    minor.h
 
 FORMS    += analyst.ui
+
+DISTFILES += \
+    conf.ini
