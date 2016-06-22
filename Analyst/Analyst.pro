@@ -13,8 +13,10 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        analyst.cpp
+        analyst.cpp \
+    tools.cpp
 
-HEADERS  += analyst.h
+HEADERS  += analyst.h \
+    tools.h
 
 FORMS    += analyst.ui

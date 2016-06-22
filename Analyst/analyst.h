@@ -15,8 +15,12 @@ public:
     explicit Analyst(QWidget *parent = 0);
     ~Analyst();
 
+public slots:
+    void callTracker();
+
 private:
     Ui::Analyst *ui;
+
 };
 
 #endif // ANALYST_H

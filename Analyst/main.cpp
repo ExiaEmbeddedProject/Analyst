@@ -1,5 +1,7 @@
 #include "analyst.h"
 #include <QApplication>
+#include "tools.h"
+#include "QProcess"
 
 int main(int argc, char *argv[])
 {
