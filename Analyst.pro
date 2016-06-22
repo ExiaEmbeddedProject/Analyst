@@ -16,11 +16,18 @@ SOURCES += main.cpp\
         analyst.cpp \
     tools.cpp \
     point.cpp \
-    markedpoint.cpp
+    markedpoint.cpp \
+    datarow.cpp \
+    minor.cpp
 
 HEADERS  += analyst.h \
     tools.h \
     point.h \
-    markedpoint.h
+    markedpoint.h \
+    datarow.h \
+    minor.h
 
 FORMS    += analyst.ui
+
+DISTFILES += \
+    conf.ini

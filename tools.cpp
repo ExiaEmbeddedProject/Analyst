@@ -1,4 +1,5 @@
 #include "tools.h"
+#include <QApplication>
 
 void tools::execCommandLine(QString path, QString parameters)
 {
@@ -50,6 +51,21 @@ QJsonObject tools::createJsonObject(QList<point> path, QList<markedPoint> marked
         array.append(obj);
     }
     object["markedPoints"] = array;
+
+    return object;
+}
+
+QJsonObject getSettings()
+{
+    QString val;
+    QFile file;
+    file.setFileName(QApplication::applicationDirPath() + "conf.ini");
+    file.open(QIODevice::ReadOnly | QIODevice::Text);
+    val = file.readAll();
+    file.close();
+
+    QJsonDocument d = QJsonDocument::fromJson(val.toUtf8());
+    QJsonObject object = d.object();
 
     return object;
 }
