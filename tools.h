@@ -11,13 +11,13 @@
 #include <QVariantList>
 #include <QObject>
 
-class tools : public QObject
+class Tools : public QObject
 {
     Q_OBJECT
 
 public:
-    tools(QObject *parent = 0);
-    static void execCommandLine(QString path, QString parameter);
+    Tools(QObject *parent = 0);
+    static void execCommandLine(QString path, QString parameter); // TODO: use namespace instead of a class for static functions
     static void execCommandLineDetached(QString path, QString parameter);
     static bool writeJsonFile(QString name, QJsonObject object);
     static QJsonObject createJsonObject(QList<point> path, QList<markedPoint> markedPoints);

@@ -12,7 +12,7 @@ dataRow::dataRow(QList<point> points, QList<markedPoint> markedPoints, QList<QPa
     this->journey = journey;
     this->sillsExceeded = sillsExceeded;
 
-    tools::writeJsonFile(QApplication::applicationDirPath() + "/" + journey +".json", tools::createJsonObject(points, markedPoints));
+    Tools::writeJsonFile(QApplication::applicationDirPath() + "/" + journey +".json", Tools::createJsonObject(points, markedPoints));
 }
 
 void dataRow::draw(QTableWidget *table)

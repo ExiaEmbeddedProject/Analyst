@@ -2,22 +2,22 @@
 #include <QApplication>
 #include "couchdb.h"
 
-tools::tools(QObject* parent) : QObject(parent)
+Tools::Tools(QObject* parent) : QObject(parent)
 {}
 
-void tools::execCommandLine(QString path, QString parameters)
+void Tools::execCommandLine(QString path, QString parameters)
 {
     QProcess *process = new QProcess();
     process->start(path, QStringList() << parameters);
 }
 
-void tools::execCommandLineDetached(QString path, QString arg)
+void Tools::execCommandLineDetached(QString path, QString arg)
 {
     QStringList args = (QStringList(arg));
     QProcess::startDetached(path, args);
 }
 
-bool tools::writeJsonFile(QString path, QJsonObject object)
+bool Tools::writeJsonFile(QString path, QJsonObject object)
 {
     QFile file(path);
 
@@ -33,7 +33,7 @@ bool tools::writeJsonFile(QString path, QJsonObject object)
     return true;
 }
 
-QJsonObject tools::createJsonObject(QList<point> path, QList<markedPoint> markedPoints)
+QJsonObject Tools::createJsonObject(QList<point> path, QList<markedPoint> markedPoints)
 {
     QJsonObject object;
 
@@ -59,7 +59,7 @@ QJsonObject tools::createJsonObject(QList<point> path, QList<markedPoint> marked
     return object;
 }
 
-void tools::testdb()
+void Tools::testdb()
 {
     Couchdb db;
 
@@ -73,17 +73,17 @@ void tools::testdb()
     connect(&db, SIGNAL(databasesListed(QVariant)), this, SLOT(onDocumentsRetreived(QVariant)));
 }
 
-void tools::onDatabasesListed(QStringList databases)
+void Tools::onDatabasesListed(QStringList databases)
 {
 
 }
 
-void tools::onAllDocumentsRetreived(QVariantList documents)
+void Tools::onAllDocumentsRetreived(QVariantList documents)
 {
 
 }
 
-void tools::onDocumentsRetreived(QVariant document)
+void Tools::onDocumentsRetreived(QVariant document)
 {
 
 }

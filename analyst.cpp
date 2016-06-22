@@ -149,7 +149,7 @@ void Analyst::bind()
 
 void Analyst::callTracker()
 {
-    tools::execCommandLineDetached("D:/Work/pri/Js/Tracker/dist/win-unpacked/tracker.exe", QApplication::applicationDirPath() + "/" + tableWidget->selectedItems().first()->text() + ".json");
+    Tools::execCommandLineDetached("D:/Work/pri/Js/Tracker/dist/win-unpacked/tracker.exe", QApplication::applicationDirPath() + "/" + tableWidget->selectedItems().first()->text() + ".json");
 }
 
 void Analyst::mine()
