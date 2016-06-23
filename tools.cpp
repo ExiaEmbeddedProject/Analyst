@@ -1,6 +1,7 @@
 #include "tools.h"
 #include <QApplication>
 #include "couchdb.h"
+#include <QSettings>
 
 Tools::Tools(QObject* parent) : QObject(parent)
 {}
@@ -63,6 +64,12 @@ void Tools::testdb()
 {
     Couchdb db;
 
+    QSettings settings("conf.ini", QSettings::IniFormat);
+    QString url = settings.value("database/url").toString();
+    qDebug() << "Couchdb url: " << url;
+    /*
+    db.setBaseUrl(url);
+
     db.listDatabases();
     connect(&db, SIGNAL(databasesListed(QStringList)), this, SLOT(onDatabasesListed(QStringList)));
 
@@ -70,7 +77,7 @@ void Tools::testdb()
     connect(&db, SIGNAL(databasesListed(QVariantList)), this, SLOT(onAllDocumentsRetreived(QVariantList)));
 
     db.getDocument("my-database", "my-random-id");
-    connect(&db, SIGNAL(databasesListed(QVariant)), this, SLOT(onDocumentsRetreived(QVariant)));
+    connect(&db, SIGNAL(databasesListed(QVariant)), this, SLOT(onDocumentsRetreived(QVariant)));*/
 }
 
 void Tools::onDatabasesListed(QStringList databases)
@@ -86,19 +93,4 @@ void Tools::onAllDocumentsRetreived(QVariantList documents)
 void Tools::onDocumentsRetreived(QVariant document)
 {
 
-}
-
-QJsonObject getSettings()
-{
-    QString val;
-    QFile file;
-    file.setFileName(QApplication::applicationDirPath() + "conf.ini");
-    file.open(QIODevice::ReadOnly | QIODevice::Text);
-    val = file.readAll();
-    file.close();
-
-    QJsonDocument d = QJsonDocument::fromJson(val.toUtf8());
-    QJsonObject object = d.object();
-
-    return object;
 }

@@ -33,4 +33,5 @@ HEADERS  += analyst.h \
 FORMS    += analyst.ui
 
 DISTFILES += \
+    conf.ini \
     conf.ini

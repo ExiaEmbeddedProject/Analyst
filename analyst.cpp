@@ -7,7 +7,7 @@
 #include "QDebug.h"
 #include "QLabel.h"
 #include "QSpinBox.h"
-
+#include <QSettings>
 
 Analyst::Analyst(QWidget *parent) :
     QMainWindow(parent),
@@ -149,7 +149,10 @@ void Analyst::bind()
 
 void Analyst::callTracker()
 {
-    Tools::execCommandLineDetached("D:/Work/pri/Js/Tracker/dist/win-unpacked/tracker.exe", QApplication::applicationDirPath() + "/" + tableWidget->selectedItems().first()->text() + ".json");
+    QSettings settings("conf.ini", QSettings::IniFormat);
+    QString filepath = settings.value("external/tracker").toString();
+    qDebug() << "Tracker path: " << filepath;
+    Tools::execCommandLineDetached(filepath, QApplication::applicationDirPath() + "/" + tableWidget->selectedItems().first()->text() + ".json");
 }
 
 void Analyst::mine()
