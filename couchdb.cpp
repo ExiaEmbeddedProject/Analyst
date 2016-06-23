@@ -23,54 +23,35 @@ void Couchdb::setBaseUrl(const QString &value)
 
 void Couchdb::listDatabases()
 {
-    QNetworkAccessManager network;
+    manager = new QNetworkAccessManager(this);
     QString url(QString("%1/_all_dbs").arg(this->baseUrl));
-    QNetworkReply *reply = network.get(QNetworkRequest(QUrl(url)));
-    QObject::connect(reply, SIGNAL(finished()), SLOT(slotDatabaseListingFinished()));
-    QObject::connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), SLOT(slotConnectionErrorOccured(QNetworkReply::NetworkError)));
+    qDebug() << "Making a GET http request to " << url;
+    connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(slotDatabaseListingFinished(QNetworkReply*)));
+    manager->get(QNetworkRequest(QUrl(url)));
 }
 
 void Couchdb::getAllDocuments(const QString &db)
 {
-    QNetworkAccessManager network;
+    manager = new QNetworkAccessManager(this);
     QString url(QString("%1/%2/_all_docs").arg(this->baseUrl).arg(db));
-    QNetworkReply *reply = network.get(QNetworkRequest(QUrl(url)));
-    QObject::connect(reply, SIGNAL(finished()), SLOT(slotDocumentListingFinished()));
-    QObject::connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), SLOT(slotConnectionErrorOccured(QNetworkReply::NetworkError)));
+    qDebug() << "Making a GET http request to " << url;
+    connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(slotAllDocumentRetrievalFinished(QNetworkReply*)));
+    manager->get(QNetworkRequest(QUrl(url)));
 }
 
 void Couchdb::getDocument(const QString &db, const QString id)
 {
-    QNetworkAccessManager network;
+    manager = new QNetworkAccessManager(this);
     QString url(QString("%1/%2/%3").arg(this->baseUrl).arg(db).arg(id));
-    QNetworkReply *reply = network.get(QNetworkRequest(QUrl(url)));
-    QObject::connect(reply, SIGNAL(finished()), SLOT(slotDocumentRetrievalFinished()));
-    QObject::connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), SLOT(slotConnectionErrorOccured(QNetworkReply::NetworkError)));
+    qDebug() << "Making a GET http request to " << url;
+    connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(slotDocumentRetrievalFinished(QNetworkReply*)));
+    manager->get(QNetworkRequest(QUrl(url)));
 }
 
-void Couchdb::slotConnectionErrorOccured(QNetworkReply::NetworkError error)
+void Couchdb::slotDatabaseListingFinished(QNetworkReply *reply)
 {
-    if (error == QNetworkReply::ConnectionRefusedError)
-    {
-        qDebug() << "Connection refused";
-    }
-    else if (error == QNetworkReply::HostNotFoundError)
-    {
-        qDebug() << "Host Not Found";
-    }
-    else if (error == QNetworkReply::ProtocolFailure)
-    {
-        qDebug() << "Protocol failure";
-    }
-    else if (error == QNetworkReply::RemoteHostClosedError)
-    {
-        qDebug() << "Remote Host closed";
-    }
-}
-
-void Couchdb::slotDatabaseListingFinished()
-{
-    const QByteArray response = ((QNetworkReply*)QObject::sender())->readAll();
+    qDebug() << "Databases listing finished";
+    const QByteArray response = reply->readAll();
     QJsonDocument document = QJsonDocument::fromJson(response);
     QJsonArray array = document.array();
     QStringList list;
@@ -81,9 +62,10 @@ void Couchdb::slotDatabaseListingFinished()
     emit databasesListed(list);
 }
 
-void Couchdb::slotAllDocumentRetrievalFinished()
+void Couchdb::slotAllDocumentRetrievalFinished(QNetworkReply *reply)
 {
-    const QByteArray response = ((QNetworkReply*)QObject::sender())->readAll();
+    qDebug() << "Documents listing finished";
+    const QByteArray response = reply->readAll();
     QJsonDocument document = QJsonDocument::fromJson(response);
     QJsonObject object = document.object();
     QJsonArray array = object["rows"].toArray();
@@ -91,9 +73,10 @@ void Couchdb::slotAllDocumentRetrievalFinished()
     emit allDocumentsRetrieved(list);
 }
 
-void Couchdb::slotDocumentRetrievalFinished()
+void Couchdb::slotDocumentRetrievalFinished(QNetworkReply *reply)
 {
-    const QByteArray response = ((QNetworkReply*)QObject::sender())->readAll();
+    qDebug() << "Document retrieval finished";
+    const QByteArray response = reply->readAll();
     QJsonDocument document = QJsonDocument::fromJson(response);
     QVariant object = document.toVariant();
     emit documentRetrieved(object);

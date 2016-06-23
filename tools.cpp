@@ -62,27 +62,32 @@ QJsonObject Tools::createJsonObject(QList<point> path, QList<markedPoint> marked
 
 void Tools::testdb()
 {
+    qDebug() << "Testing couchdb database...";
+
     Couchdb db;
 
     QSettings settings("conf.ini", QSettings::IniFormat);
     QString url = settings.value("database/url").toString();
     qDebug() << "Couchdb url: " << url;
-    /*
+
     db.setBaseUrl(url);
 
     db.listDatabases();
     connect(&db, SIGNAL(databasesListed(QStringList)), this, SLOT(onDatabasesListed(QStringList)));
 
-    db.getAllDocuments("my-database");
-    connect(&db, SIGNAL(databasesListed(QVariantList)), this, SLOT(onAllDocumentsRetreived(QVariantList)));
+    db.getAllDocuments("pandora");
+    connect(&db, SIGNAL(allDocumentsRetrieved(QVariantList)), this, SLOT(onAllDocumentsRetreived(QVariantList)));
 
-    db.getDocument("my-database", "my-random-id");
-    connect(&db, SIGNAL(databasesListed(QVariant)), this, SLOT(onDocumentsRetreived(QVariant)));*/
+    db.getDocument("pandora", "test1");
+    connect(&db, SIGNAL(documentRetrieved(QVariant)), this, SLOT(onDocumentsRetreived(QVariant)));
 }
 
 void Tools::onDatabasesListed(QStringList databases)
 {
-
+    foreach(QString db, databases)
+    {
+        qDebug() << "Databases: " << db;
+    }
 }
 
 void Tools::onAllDocumentsRetreived(QVariantList documents)

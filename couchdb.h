@@ -32,12 +32,12 @@ signals:
 
 private:
     QString baseUrl;
+    QNetworkAccessManager *manager;
 
 private slots:
-    void slotConnectionErrorOccured(QNetworkReply::NetworkError error);
-    void slotDatabaseListingFinished();
-    void slotAllDocumentRetrievalFinished();
-    void slotDocumentRetrievalFinished();
+    void slotDatabaseListingFinished(QNetworkReply*);
+    void slotAllDocumentRetrievalFinished(QNetworkReply*);
+    void slotDocumentRetrievalFinished(QNetworkReply*);
 };
 
 #endif // COUCHDB_H
