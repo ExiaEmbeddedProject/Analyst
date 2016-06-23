@@ -9,6 +9,7 @@
 #include <QMap>
 #include <QJsonDocument>
 #include <QJsonValue>
+#include <QVariantList>
 
 
 class Couchdb : public QObject
@@ -16,28 +17,15 @@ class Couchdb : public QObject
     Q_OBJECT
 
 public:
-    Couchdb(QObject *parent = 0);
-    QString getBaseUrl() const;
-    void setBaseUrl(const QString &value);
-
-public slots:
-    void listDatabases();
-    void getAllDocuments(const QString &db);
-    void getDocument(const QString &db, const QString id);
-
-signals:
-    void databasesListed(const QStringList &list);
-    void allDocumentsRetrieved(const QVariantList &list);
-    void documentRetrieved(const QVariant &value);
-
+    explicit Couchdb(QObject *parent = 0);
+    void getAllDocuments(const QString &url, const QString &db);
+    static QVariantList documents;
 private:
     QString baseUrl;
     QNetworkAccessManager *manager;
 
 private slots:
-    void slotDatabaseListingFinished(QNetworkReply*);
-    void slotAllDocumentRetrievalFinished(QNetworkReply*);
-    void slotDocumentRetrievalFinished(QNetworkReply*);
+    void replyFinished(QNetworkReply *reply);
 };
 
 #endif // COUCHDB_H

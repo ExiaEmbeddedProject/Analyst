@@ -157,13 +157,9 @@ void Analyst::callTracker()
 
 void Analyst::mine()
 {
-    Tools tools;
-    tools.testdb();
-    /*
     QMap<QString, float> sills = QMap<QString, float>();
     sills.insert(QString("tagada"), 2);
 
     this->minor.doJob(sills, this->tableWidget);
     lToolTip->setVisible("true");
-    */
 }

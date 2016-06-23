@@ -8,76 +8,46 @@
 
 Couchdb::Couchdb(QObject* parent) : QObject(parent)
 {
-    this->baseUrl = "http://localhost:5984/";
+
 }
 
-QString Couchdb::getBaseUrl() const
-{
-    return baseUrl;
-}
+QVariantList Couchdb::documents = QVariantList();
 
-void Couchdb::setBaseUrl(const QString &value)
-{
-    baseUrl = value;
-}
-
-void Couchdb::listDatabases()
+void Couchdb::getAllDocuments(const QString &url, const QString &db)
 {
     manager = new QNetworkAccessManager(this);
-    QString url(QString("%1/_all_dbs").arg(this->baseUrl));
-    qDebug() << "Making a GET http request to " << url;
-    connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(slotDatabaseListingFinished(QNetworkReply*)));
-    manager->get(QNetworkRequest(QUrl(url)));
+
+    connect(manager, SIGNAL(finished(QNetworkReply*)),
+            this, SLOT(replyFinished(QNetworkReply*)));
+
+    QString finalUrl(QString("%1/%2/_all_docs").arg(url).arg(db));
+    QNetworkRequest request = QNetworkRequest(QUrl(finalUrl));
+    request.setRawHeader("User-Agent", "Mozilla Firefox");
+
+    qDebug() << "Making a GET http request to " << finalUrl;
+
+
+    manager->get(request);
 }
 
-void Couchdb::getAllDocuments(const QString &db)
+void Couchdb::replyFinished(QNetworkReply *reply)
 {
-    manager = new QNetworkAccessManager(this);
-    QString url(QString("%1/%2/_all_docs").arg(this->baseUrl).arg(db));
-    qDebug() << "Making a GET http request to " << url;
-    connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(slotAllDocumentRetrievalFinished(QNetworkReply*)));
-    manager->get(QNetworkRequest(QUrl(url)));
-}
-
-void Couchdb::getDocument(const QString &db, const QString id)
-{
-    manager = new QNetworkAccessManager(this);
-    QString url(QString("%1/%2/%3").arg(this->baseUrl).arg(db).arg(id));
-    qDebug() << "Making a GET http request to " << url;
-    connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(slotDocumentRetrievalFinished(QNetworkReply*)));
-    manager->get(QNetworkRequest(QUrl(url)));
-}
-
-void Couchdb::slotDatabaseListingFinished(QNetworkReply *reply)
-{
-    qDebug() << "Databases listing finished";
-    const QByteArray response = reply->readAll();
-    QJsonDocument document = QJsonDocument::fromJson(response);
-    QJsonArray array = document.array();
-    QStringList list;
-    foreach(QVariant item, array.toVariantList())
+    if(reply->error())
     {
-        list << item.toString();
+        qDebug() << "ERROR!";
+        qDebug() << reply->errorString();
     }
-    emit databasesListed(list);
-}
+    else
+    {
+        qDebug() << "Couchdb response: " << reply->attribute(QNetworkRequest::HttpReasonPhraseAttribute).toString();
+        const QByteArray response = reply->readAll();
+        QJsonDocument document = QJsonDocument::fromJson(response);
+        QJsonObject object = document.object();
+        QJsonArray array = object["rows"].toArray();
+        QVariantList list = array.toVariantList();
+        Couchdb::documents = list;
+        qDebug() << list.size() << " documents retrieved.";
+    }
 
-void Couchdb::slotAllDocumentRetrievalFinished(QNetworkReply *reply)
-{
-    qDebug() << "Documents listing finished";
-    const QByteArray response = reply->readAll();
-    QJsonDocument document = QJsonDocument::fromJson(response);
-    QJsonObject object = document.object();
-    QJsonArray array = object["rows"].toArray();
-    QVariantList list = array.toVariantList();
-    emit allDocumentsRetrieved(list);
-}
-
-void Couchdb::slotDocumentRetrievalFinished(QNetworkReply *reply)
-{
-    qDebug() << "Document retrieval finished";
-    const QByteArray response = reply->readAll();
-    QJsonDocument document = QJsonDocument::fromJson(response);
-    QVariant object = document.toVariant();
-    emit documentRetrieved(object);
+    reply->deleteLater();
 }
