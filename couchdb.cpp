@@ -11,6 +11,8 @@ Couchdb::Couchdb(QObject* parent) : QObject(parent)
 
 }
 
+QVariantList Couchdb::documents = QVariantList();
+
 void Couchdb::getAllDocuments(const QString &url, const QString &db)
 {
     manager = new QNetworkAccessManager(this);
@@ -43,7 +45,7 @@ void Couchdb::replyFinished(QNetworkReply *reply)
         QJsonObject object = document.object();
         QJsonArray array = object["rows"].toArray();
         QVariantList list = array.toVariantList();
-        this->documents = list;
+        Couchdb::documents = list;
         qDebug() << list.size() << " documents retrieved.";
     }
 
