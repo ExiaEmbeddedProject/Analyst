@@ -11,7 +11,7 @@ Couchdb::Couchdb(QObject* parent) : QObject(parent)
 
 }
 
-QVariantList Couchdb::documents = QVariantList();
+QJsonArray Couchdb::documents = QJsonArray();
 
 void Couchdb::getAllDocuments(const QString &url, const QString &db)
 {
@@ -43,10 +43,8 @@ void Couchdb::replyFinished(QNetworkReply *reply)
         const QByteArray response = reply->readAll();
         QJsonDocument document = QJsonDocument::fromJson(response);
         QJsonObject object = document.object();
-        QJsonArray array = object["rows"].toArray();
-        QVariantList list = array.toVariantList();
-        Couchdb::documents = list;
-        qDebug() << list.size() << " documents retrieved.";
+        Couchdb::documents = object["rows"].toArray();
+        qDebug() << Couchdb::documents.size() << " documents retrieved.";
     }
 
     reply->deleteLater();

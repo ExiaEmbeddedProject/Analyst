@@ -19,7 +19,7 @@ class Couchdb : public QObject
 public:
     explicit Couchdb(QObject *parent = 0);
     void getAllDocuments(const QString &url, const QString &db);
-    static QVariantList documents;
+    static QJsonArray documents;
 private:
     QString baseUrl;
     QNetworkAccessManager *manager;
