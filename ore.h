@@ -5,16 +5,28 @@
 #include "markedPoint.h"
 #include "QTableWidget"
 
-class dataRow
+class Ore
 {
     public:
-        dataRow();
-        dataRow(QList<point> points, QList<markedPoint> markedPoints, QList<QPair<float,int>> sillsExceeded, QString journey);
+        Ore();
         void draw(QTableWidget *table);
-
-    private:
-        QList<QPair<float,int>> sillsExceeded;
+        void createPath();
         QString journey;
+
+        QList<point> points;
+        QList<markedPoint> markedPoints;
+
+        QPair<float,int> tempMin;
+        QPair<float,int> tempMax;
+
+        QPair<float,int> humiMin;
+        QPair<float,int> humiMax;
+
+        QPair<float,int> accelMin;
+        QPair<float,int> accelMax;
+
+        QPair<float,int> gyroMin;
+        QPair<float,int> gyroMax;
 };
 
 #endif // DATAROW_H
