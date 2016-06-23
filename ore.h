@@ -13,6 +13,8 @@ class Ore
         void createPath();
         QString journey;
 
+        QList<QPair<float,int>*> sillsExceeded;
+
         QList<point> points;
         QList<markedPoint> markedPoints;
 

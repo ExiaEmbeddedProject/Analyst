@@ -2,6 +2,7 @@
 
 point::point()
 {
+
 }
 
 point::point(float lat, float lng)

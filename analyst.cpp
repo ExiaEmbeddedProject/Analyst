@@ -152,14 +152,17 @@ void Analyst::callTracker()
     QSettings settings("conf.ini", QSettings::IniFormat);
     QString filepath = settings.value("external/tracker").toString();
     qDebug() << "Tracker path: " << filepath;
-    Tools::execCommandLineDetached(filepath, QApplication::applicationDirPath() + "/" + tableWidget->selectedItems().first()->text() + ".json");
+    qDebug() << "file: " << tableWidget->selectedItems().first()->text();
+    qDebug() << QApplication::applicationDirPath() + "/" + tableWidget->selectedItems().first()->text() + ".json";
+    Tools::execCommandLineDetached("D:Work/pri/Js/Tracker/dist/win-unpacked/tracker.exe", "D:/Work/pri/Analyst/build-Analyst-Desktop_Qt_5_6_1_MSVC2015_64bit-Debug/debug/Pau-Rouen.json");
 }
 
 void Analyst::mine()
 {
     QMap<QString, float> sills = QMap<QString, float>();
-    sills.insert(QString("tagada"), 2);
+    sills.insert(QString("tempMin"), sbTemperatureMin->value());
+    sills.insert(QString("tempMax"), sbTemperatureMax->value());
 
-    this->minor.doJob(sills, this->tableWidget);
-    lToolTip->setVisible("true");
+    this->minor.mine(sills, this->tableWidget);
+    //lToolTip->setVisible("true");
 }

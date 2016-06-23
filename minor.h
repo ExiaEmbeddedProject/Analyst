@@ -10,10 +10,10 @@ class Minor
 {
     public:
         Minor();
-        void doJob(QMap<QString,float> sills, QTableWidget *table);
+        void mine(QMap<QString,float> sills, QTableWidget *table);
 
     private:
-        QList<Ore> dataRows;
+        QList<Ore> ores;
         QString prospect(QString ore, QString unit, QPair<float,int> *oreMin, QPair<float,int> *oreMax, float value, float sillUp, float sillDown);
 };
 

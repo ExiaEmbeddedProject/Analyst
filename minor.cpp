@@ -1,28 +1,13 @@
 #include "minor.h"
-
-struct Document{
-    QString _id;
-    QString _rev;
-    float Accel_x;
-    float Accel_y;
-    float Accel_z;
-    QString DateHeure;
-    float Gyro_x;
-    float Gyro_y;
-    float Gyro_z;
-    short Humidite;
-    float Latitude;
-    float Longitude;
-    float Temperature;
-    QString Journey;
-};
+#include "couchdb.h"
+#include "sstream"
 
 Minor::Minor()
 {
-    this->dataRows = QList<Ore>();
+    this->ores = QList<Ore>();
 }
 
-void Minor::doJob(QMap<QString,float> sills, QTableWidget *table)
+void Minor::mine(QMap<QString,float> sills, QTableWidget *table)
 {
     //Do some thing
 
@@ -31,28 +16,30 @@ void Minor::doJob(QMap<QString,float> sills, QTableWidget *table)
 
     Ore *ore = new Ore();
 
-    foreach(QVariant row, rows)
+    foreach(QJsonValue row, Couchdb::documents)
     {
-        QJsonObject object = row.toJsonObject();
-        title == "";
+        QJsonObject object = row.toObject()["value"].toObject();
 
-        title += this->prospect("Temperature", "K", &ore->tempMin, &ore->tempMax, object["Temperature"].toDouble(), sills.find("tempMax").value(), sills.find("tempMin").value());
+        title = "";
+        title += this->prospect("Temperature", "K", &ore->tempMin, &ore->tempMax, object["temperature"].toDouble(), sills.find("tempMax").value(), sills.find("tempMin").value());
+        //title += this->prospect("Humidity", "%", &ore->humiMin, &ore->humiMax, object["humidity"].toDouble(), sills.find("humiMax").value(), sills.find("humiMin").value());
 
-        ore->journey = QString(row["Journey"]);
+
+        ore->journey = QString(row.toObject()["key"].toString());
 
         if(title != "")
         {
-            ore->markedPoints.append(markedPoint(object["Latitude"].toDouble(),object["Longitude"].toDouble(),title));
+            ore->markedPoints.append(markedPoint(object["latitude"].toDouble(),object["longitude"].toDouble(),title));
         } else
         {
-            ore->points.append(point(object["Latitude"].toDouble(),object["Longitude"].toDouble()));
+            ore->points.append(point(object["latitude"].toDouble(),object["longitude"].toDouble()));
         }
     }
 
     ore->createPath();
     ore->draw(table);
 
-    this->ores.apprend(ore);
+    this->ores.append(*ore);
 }
 
 QString Minor::prospect(QString ore, QString unit, QPair<float,int> *oreMin, QPair<float,int> *oreMax, float value, float sillUp, float sillDown)
@@ -61,14 +48,14 @@ QString Minor::prospect(QString ore, QString unit, QPair<float,int> *oreMin, QPa
         oreMin->second++;
         if(value < oreMin->first) oreMin->first = value;
 
-        return ore + ":" + value + unit + "<br />";
+        return ore + ":" + QString::number(value) + unit + "<br />";
 
     } else if(value  > sillUp)
     {
         oreMax->second++;
         if(value > oreMax->first) oreMax->first = value;
 
-        return ore + ":" + value + unit + "<br />";
+        return ore + ":" + QString::number(value) + unit + "<br />";
     }
 
     else return "";

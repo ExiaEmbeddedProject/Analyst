@@ -10,6 +10,7 @@
 #include <QJsonDocument>
 #include <QJsonValue>
 #include <QVariantList>
+#include <QJsonArray>
 
 
 class Couchdb : public QObject
