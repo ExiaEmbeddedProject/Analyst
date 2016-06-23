@@ -37,15 +37,14 @@ void Couchdb::replyFinished(QNetworkReply *reply)
     }
     else
     {
-        qDebug() << reply->attribute(QNetworkRequest::HttpReasonPhraseAttribute).toString();
-        qDebug() << "Documents listing finished";
+        qDebug() << "Couchdb response: " << reply->attribute(QNetworkRequest::HttpReasonPhraseAttribute).toString();
         const QByteArray response = reply->readAll();
         QJsonDocument document = QJsonDocument::fromJson(response);
         QJsonObject object = document.object();
         QJsonArray array = object["rows"].toArray();
         QVariantList list = array.toVariantList();
         this->documents = list;
-        qDebug() << "There is " << list.size() << " documents in database.";
+        qDebug() << list.size() << " documents retrieved.";
     }
 
     reply->deleteLater();
