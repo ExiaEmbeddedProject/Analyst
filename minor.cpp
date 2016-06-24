@@ -63,6 +63,7 @@ void Minor::mine(QMap<QString,float> sills, QTableWidget *table)
 
     delete ore;
     emit setVisibleText(false);
+    emit setVisibleText(false);
 }
 
 QString Minor::prospect(QString ore, QString unit, QPair<float,int> *oreMin, QPair<float,int> *oreMax, float value, float sillUp, float sillDown)

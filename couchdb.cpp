@@ -20,7 +20,7 @@ void Couchdb::getAllDocuments(const QString &url, const QString &db)
     connect(manager, SIGNAL(finished(QNetworkReply*)),
             this, SLOT(replyFinished(QNetworkReply*)));
 
-    QString finalUrl(QString("%1/%2/_design/entry/_view/all").arg(url).arg(db));
+    QString finalUrl(QString("%1/%2/_design/entries/_view/all").arg(url).arg(db));
     QNetworkRequest request = QNetworkRequest(QUrl(finalUrl));
     request.setRawHeader("User-Agent", "Mozilla Firefox");
 
