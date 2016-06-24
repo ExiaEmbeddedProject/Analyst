@@ -21,12 +21,13 @@ void Minor::mine(QMap<QString,float> sills, QTableWidget *table)
     QVariantList rows;
     QString content;
     QString journey = "";
-    Ore *ore = new Ore();
+    Ore *ore;
 
     foreach(QJsonValue row, Couchdb::documents)
     {
         if(journey != QString(row.toObject()["key"].toString()))
         {
+            ore = new Ore();
             if(journey != "")
             {
                 ore->createPath();
@@ -62,7 +63,6 @@ void Minor::mine(QMap<QString,float> sills, QTableWidget *table)
     ore->draw(table);
 
     delete ore;
-    emit setVisibleText(false);
     emit setVisibleText(false);
 }
 
