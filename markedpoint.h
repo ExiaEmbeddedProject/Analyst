@@ -8,8 +8,8 @@ class markedPoint : public point
 {
     public:
         markedPoint();
-        markedPoint(float lat, float lng, QString title, QString content);
-        QString content;
+        markedPoint(float lat, float lng, QString title, QString info);
+        QString info;
         QString title;
         void write(QJsonObject &json) const;
 };

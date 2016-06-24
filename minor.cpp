@@ -19,7 +19,7 @@ void Minor::mine(QMap<QString,float> sills, QTableWidget *table)
     //Do some thing
 
     QVariantList rows;
-    QString content;
+    QString info;
     QString journey = "";
     Ore *ore;
 
@@ -27,36 +27,34 @@ void Minor::mine(QMap<QString,float> sills, QTableWidget *table)
     {
         if(journey != QString(row.toObject()["key"].toString()))
         {
-            ore = new Ore();
             if(journey != "")
             {
                 ore->createPath();
                 ore->draw(table);
             }
+            ore = new Ore();
             ore->journey = journey = QString(row.toObject()["key"].toString());
         }
 
         QJsonObject object = row.toObject()["value"].toObject();
 
-        content = "";
-        content += this->prospect("Temperature", "K", &ore->tempMin, &ore->tempMax, object["temperature"].toDouble(), sills.find("tempMax").value(), sills.find("tempMin").value());
-        content += this->prospect("Humidity", "%", &ore->humiMin, &ore->humiMax, object["humidity"].toDouble(), sills.find("humiMax").value(), sills.find("humiMin").value());
+        info = "";
+        info += this->prospect("Temperature", "K", &ore->tempMin, &ore->tempMax, object["temperature"].toDouble(), sills.find("tempMax").value(), sills.find("tempMin").value());
+        info += this->prospect("Humidity", "%", &ore->humiMin, &ore->humiMax, object["humidity"].toDouble(), sills.find("humiMax").value(), sills.find("humiMin").value());
 
-        content += this->prospect("Accelerometer", "m.s^-2", &ore->accelMin, &ore->accelMax, object["accelX"].toDouble(), sills.find("accelMax").value(), sills.find("accelMin").value());
-        content += this->prospect("Accelerometer", "m.s^-2", &ore->accelMin, &ore->accelMax, object["accelY"].toDouble(), sills.find("accelMax").value(), sills.find("accelMin").value());
-        content += this->prospect("Accelerometer", "m.s^-2", &ore->accelMin, &ore->accelMax, object["accelZ"].toDouble(), sills.find("accelMax").value(), sills.find("accelMin").value());
+        info += this->prospect("Accelerometer", "m.s^-2", &ore->accelMin, &ore->accelMax, object["accelX"].toDouble(), sills.find("accelMax").value(), sills.find("accelMin").value());
+        info += this->prospect("Accelerometer", "m.s^-2", &ore->accelMin, &ore->accelMax, object["accelY"].toDouble(), sills.find("accelMax").value(), sills.find("accelMin").value());
+        info += this->prospect("Accelerometer", "m.s^-2", &ore->accelMin, &ore->accelMax, object["accelZ"].toDouble(), sills.find("accelMax").value(), sills.find("accelMin").value());
 
-        content += this->prospect("Gyroscope", "degree.s", &ore->gyroMin, &ore->gyroMax, object["gyroX"].toDouble(), sills.find("gyroMax").value(), sills.find("gyroMin").value());
-        content += this->prospect("Gyroscope", "degree.s", &ore->gyroMin, &ore->gyroMax, object["gyroY"].toDouble(), sills.find("gyroMax").value(), sills.find("gyroMin").value());
-        content += this->prospect("Gyroscope", "degree.s", &ore->gyroMin, &ore->gyroMax, object["gyroZ"].toDouble(), sills.find("gyroMax").value(), sills.find("gyroMin").value());
+        info += this->prospect("Gyroscope", "degree.s", &ore->gyroMin, &ore->gyroMax, object["gyroX"].toDouble(), sills.find("gyroMax").value(), sills.find("gyroMin").value());
+        info += this->prospect("Gyroscope", "degree.s", &ore->gyroMin, &ore->gyroMax, object["gyroY"].toDouble(), sills.find("gyroMax").value(), sills.find("gyroMin").value());
+        info += this->prospect("Gyroscope", "degree.s", &ore->gyroMin, &ore->gyroMax, object["gyroZ"].toDouble(), sills.find("gyroMax").value(), sills.find("gyroMin").value());
 
-        if(content != "")
+        if(info != "")
         {
-            ore->markedPoints.append(markedPoint(object["latitude"].toDouble(),object["longitude"].toDouble(),"UnexpectedPoint",content));
-        } else
-        {
-            ore->points.append(point(object["latitude"].toDouble(),object["longitude"].toDouble()));
+            ore->markedPoints.append(markedPoint(object["latitude"].toDouble(),object["longitude"].toDouble(),"UnexpectedPoint",info));
         }
+        ore->points.append(point(object["latitude"].toDouble(),object["longitude"].toDouble()));
     }
 
     ore->createPath();
