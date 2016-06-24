@@ -46,7 +46,13 @@ void Ore::draw(QTableWidget *table)
         QTableWidgetItem *itab;
         itab = new QTableWidgetItem;
         itab->setText(QString::number(this->sillsExceeded[i]->first) + "(" + QString::number(this->sillsExceeded[i]->second) + ")");
+
         table->setItem(table->rowCount() - 1, i + 1, itab);
+
+        if(this->sillsExceeded[i]->second > 0)
+            table->item(table->rowCount() - 1, i + 1)->setBackground(Qt::red);
+        else
+            table->item(table->rowCount() - 1, i + 1)->setBackground(Qt::green);
     }
 }
 

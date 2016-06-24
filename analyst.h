@@ -7,6 +7,8 @@
 #include <QPushButton.h>
 #include <QSpinBox.h>
 #include "minor.h"
+#include "qmovie.h"
+#include "qlabel.h"
 
 namespace Ui {
     class Analyst;
@@ -39,8 +41,11 @@ class Analyst : public QMainWindow
         QLabel *lToolTip;
         QPushButton *bDataMining;
         Ui::Analyst *ui;
-        void test();
-        Minor minor;
+
+        QMovie *movie;
+        QLabel *processLabel;
+
+        Minor *minor;
 };
 
 #endif // ANALYST_H

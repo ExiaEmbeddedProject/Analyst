@@ -4,16 +4,28 @@
 #include "QTableWidget.h"
 #include "ore.h"
 #include "markedpoint.h"
+#include "QLabel"
+#include "QThread"
 
 
-class Minor
+class Minor : public QThread
 {
+    Q_OBJECT
+
+protected:
+    void run();
+
     public:
         Minor();
         void mine(QMap<QString,float> sills, QTableWidget *table);
+        QMap<QString,float> sills;
+        QTableWidget *table;
+        QLabel *processLabel;
+
+    signals:
+        void setVisibleText(bool);
 
     private:
-        QList<Ore> ores;
         QString prospect(QString ore, QString unit, QPair<float,int> *oreMin, QPair<float,int> *oreMax, float value, float sillUp, float sillDown);
 };
 
